@@ -2,22 +2,21 @@
 namespace Elf\Database\QueryBuilder;
 
 use Eaf\Util\Valid;
+use Eal\Database\ConnectManager;
 
 class MysqlQueryBuilder {
     private $_sType;
-    private $_objConn;
-
     private $_aQuery;
-    
-    public function __construct(MysqlConnector &$objConn, $sType) {
+
+    public function __construct($sTable, $sType) {
         $this->_aQuery  = array();
+        $this->_aQuery['table'] = $sTable;
         $this->_sType   = $sType;
-        $this->_objConn = $objConn;
     }
 
-    public function table($sTableName) {
-        $this->_aQuery['table'] = $sTableName;
-    }
+    //public function table($sTableName) {
+    //    $this->_aQuery['table'] = $sTableName;
+    //}
 
     public function field(array $aField) {
         $this->_aQuery['field'] = $this->aField;
@@ -41,8 +40,12 @@ class MysqlQueryBuilder {
         return $this;
     }
 
-    public function done() {
+    public function getValue() {
+        return $this->_aValue;
+    }
 
+    public function getSql() {
+        return $this->_buildQuery();
     }
 
     private function _buildQuery() {
