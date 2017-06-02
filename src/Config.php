@@ -5,7 +5,7 @@
  * @date 2017.05.31 17:41:58
  */
 
-namespace Elm;
+namespace Elf;
 class Config {
     static private $_aConfig = array();
 

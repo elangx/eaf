@@ -5,9 +5,9 @@
  * @date 2017.05.31 17:34:24
  */
 
-namespace Elm;
+namespace Elf;
 
-use Elm\Connctor\ConnectFactory;
+use Elf\Connctor\ConnectFactory;
 
 class ConnectManager {
     /*
