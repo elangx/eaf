@@ -40,6 +40,16 @@ class MysqlQueryBuilder {
         return $this;
     }
 
+    public function set(array $aSet) {
+        $this->_aQuery['set'] = $aSet;
+        return $this;
+    }
+
+    public function inset(array $aSet) {
+        $this->_aQuery['inset'] = $aSet;
+        return $this;
+    }
+
     public function getValue() {
         return $this->_aValue;
     }
@@ -77,6 +87,13 @@ class MysqlQueryBuilder {
         $sSql = '';
         $sSql .= $this->_buildDeleteTable();
         $sSql .= $this->_buildWhere();
+        return $sSql;
+    }
+
+    private function _buildInsert() {
+        $sSql = '';
+        $sSql .= $this->_buildInsertTable();
+        $sSql .= $this->_buildInset();
         return $sSql;
     }
 
@@ -153,6 +170,28 @@ class MysqlQueryBuilder {
         if (!Valid::isKeyValid($this->_aQuery, 'table')) {
             return '';
         }
-        return ' delete from ' . $this->_aQuery['table'];
+        return ' delete from ' . $this->_aQuery['table'] . ' ';
+    }
+
+    private function _buildInsertTable() {
+        if (!Valid::isKeyValid($this->_aQuery, 'table')) {
+            return '';
+        }
+        return 'insert into ' . $this->_aQuery['table'] . ' ';
+    }
+
+    private function _buildInset() {
+        if (!Valid::isKeyArrayValid($this->_aQuery, 'inset')) {
+            return '';
+        }
+        $sSql = '';
+        $aKeys = array();
+        $aMark = array();
+        foreach ($this->_aQuery['inset'] as $sKey => $mVal) {
+            $aKeys[] = $sKey;
+            $aMark[] = '?';
+            $this->_aVal[] = $mVal;
+        }
+        return ' (' . implode(',', $aKeys) . ') values (' . implode(',', $aMark) . ')';
     }
 }
